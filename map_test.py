@@ -4,6 +4,21 @@ import folium
 from streamlit_folium import st_folium
 import time
 
+
+@st.cache_resource
+def create_map(data):
+    # Initialize the map at an average location
+    m = folium.Map(location=[data['Latitude'].mean(), data['Longitude'].mean()], zoom_start=5)
+    
+    # Add markers for each place with both pop-up and tooltip
+    for _, row in data.iterrows():
+        folium.Marker(
+            location=[row['Latitude'], row['Longitude']],
+            popup=folium.Popup(row['Term'], parse_html=True),
+            tooltip=row['Term']  # Tooltip for hover
+        ).add_to(m)
+    return m
+    
 # Set page config to use full screen
 st.set_page_config(layout="wide")
 
@@ -33,20 +48,11 @@ if 'Latitude' in df.columns and 'Longitude' in df.columns:
     # Drop rows with invalid coordinates
     df = df.dropna(subset=['Latitude', 'Longitude'])
 
-    # Initialize the map at an average location
-    m = folium.Map(location=[df['Latitude'].mean(), df['Longitude'].mean()], zoom_start=5)
-
-    # Add markers for each place
-    for _, row in df.iterrows():
-        folium.Marker(
-            location=[row['Latitude'], row['Longitude']],
-            popup=folium.Popup(row['Term'], parse_html=True),
-            tooltip=row['Term']  # Tooltip for hover
-        ).add_to(m)
-
-    time.sleep(0.5)
+    # Generate the map and cache it
+    map_object = create_map(df)
+    
     # Display the map
-    st_folium(m, width=None, height=800)
+    st_folium(map_object, width=None, height=600, key="map_render")
 else:
     st.write("The selected sheet does not contain 'Latitude' and 'Longitude' columns.")
 
