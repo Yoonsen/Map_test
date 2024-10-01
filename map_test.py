@@ -14,7 +14,7 @@ def create_map(data):
     # Create a marker cluster with spiderfy behavior enabled
     marker_cluster = MarkerCluster(
         spiderfyOnMaxZoom=True,  # Allow clusters to expand on click
-        disableClusteringAtZoom=12  # Also disable clustering at a closer zoom level
+        disableClusteringAtZoom=8  # Also disable clustering at a closer zoom level
     ).add_to(m)
     
     # Add markers for each place with both pop-up and tooltip
