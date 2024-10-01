@@ -52,7 +52,7 @@ if 'Latitude' in df.columns and 'Longitude' in df.columns:
     map_object = create_map(df)
     
     # Display the map
-    st_folium(map_object, width=None, height=600, key="map_render")
+    st_folium(map_object, width=None, height=900, key="map_render")
 else:
     st.write("The selected sheet does not contain 'Latitude' and 'Longitude' columns.")
 
