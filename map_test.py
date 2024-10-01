@@ -13,7 +13,7 @@ def create_map(data):
     marker_cluster = MarkerCluster().add_to(m)
     
     # Add markers for each place with both pop-up and tooltip
-    for _, row in df.iterrows():
+    for _, row in data.iterrows():
         folium.Marker(
             location=[row['Latitude'], row['Longitude']],
             popup=folium.Popup(row['Term'], parse_html=True),
