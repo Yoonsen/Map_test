@@ -9,14 +9,17 @@ import time
 def create_map(data):
     # Initialize the map at an average location
     m = folium.Map(location=[data['Latitude'].mean(), data['Longitude'].mean()], zoom_start=5)
+    marker_cluster = MarkerCluster().add_to(m)
     
     # Add markers for each place with both pop-up and tooltip
-    for _, row in data.iterrows():
+    for _, row in df.iterrows():
         folium.Marker(
             location=[row['Latitude'], row['Longitude']],
             popup=folium.Popup(row['Term'], parse_html=True),
             tooltip=row['Term']  # Tooltip for hover
-        ).add_to(m)
+        ).add_to(marker_cluster)
+    # Add markers for each place with both pop-up and tooltip
+    
     return m
     
 # Set page config to use full screen
