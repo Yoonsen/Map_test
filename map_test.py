@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import st_folium
-
+import time
 
 # Set page config to use full screen
 st.set_page_config(layout="wide")
@@ -44,7 +44,7 @@ if 'Latitude' in df.columns and 'Longitude' in df.columns:
             tooltip=row['Term']  # Tooltip for hover
         ).add_to(m)
 
-     time.sleep(0.5)
+    time.sleep(0.5)
     # Display the map
     st_folium(m, width=None, height=800)
 else:
