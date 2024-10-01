@@ -6,7 +6,7 @@ import time
 from folium.plugins import MarkerCluster
 
 
-@st.cache_resource
+#@st.cache_resource
 def create_map(data):
     # Initialize the map at an average location
     m = folium.Map(location=[data['Latitude'].mean(), data['Longitude'].mean()], zoom_start=5)
