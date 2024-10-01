@@ -43,7 +43,8 @@ if 'Latitude' in df.columns and 'Longitude' in df.columns:
             popup=folium.Popup(row['Term'], parse_html=True),
             tooltip=row['Term']  # Tooltip for hover
         ).add_to(m)
-    
+
+     time.sleep(0.5)
     # Display the map
     st_folium(m, width=None, height=800)
 else:
