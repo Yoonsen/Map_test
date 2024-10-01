@@ -11,9 +11,10 @@ def create_map(data):
     # Initialize the map at an average location
     m = folium.Map(location=[data['Latitude'].mean(), data['Longitude'].mean()], zoom_start=5)
     
-    # Create a marker cluster with custom zoom behavior
+    # Create a marker cluster with spiderfy behavior enabled
     marker_cluster = MarkerCluster(
-        disableClusteringAtZoom=12  # Disable clustering at a closer zoom level
+        spiderfyOnMaxZoom=True,  # Allow clusters to expand on click
+        disableClusteringAtZoom=12  # Also disable clustering at a closer zoom level
     ).add_to(m)
     
     # Add markers for each place with both pop-up and tooltip
