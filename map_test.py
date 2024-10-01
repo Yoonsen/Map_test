@@ -16,10 +16,9 @@ def create_map(data):
     for _, row in data.iterrows():
         folium.Marker(
             location=[row['Latitude'], row['Longitude']],
-            popup=folium.Popup(row['Term'], parse_html=True),
-            tooltip=row['Term']  # Tooltip for hover
+            popup=row['Term'],
+            tooltip=row['Term']
         ).add_to(marker_cluster)
-    # Add markers for each place with both pop-up and tooltip
     
     return m
     
