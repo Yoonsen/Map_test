@@ -10,7 +10,11 @@ from folium.plugins import MarkerCluster
 def create_map(data):
     # Initialize the map at an average location
     m = folium.Map(location=[data['Latitude'].mean(), data['Longitude'].mean()], zoom_start=5)
-    marker_cluster = MarkerCluster().add_to(m)
+    
+    # Create a marker cluster with custom zoom behavior
+    marker_cluster = MarkerCluster(
+        disableClusteringAtZoom=12  # Disable clustering at a closer zoom level
+    ).add_to(m)
     
     # Add markers for each place with both pop-up and tooltip
     for _, row in data.iterrows():
@@ -56,7 +60,7 @@ if 'Latitude' in df.columns and 'Longitude' in df.columns:
     
     # Display the map
     # Display the map with return value to enable full interactivity
-    st_data = st_folium(map_object, width=None, height=900, key="map_render", returned=True)
+    st_data = st_folium(map_object, width=None, height=900, key="map_render")
 else:
     st.write("The selected sheet does not contain 'Latitude' and 'Longitude' columns.")
 
