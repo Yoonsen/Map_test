@@ -3,6 +3,7 @@ import pandas as pd
 import folium
 from streamlit_folium import st_folium
 import time
+from folium.plugins import MarkerCluster
 
 
 @st.cache_resource
