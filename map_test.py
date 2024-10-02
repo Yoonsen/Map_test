@@ -44,7 +44,7 @@ with select_field:
     sheet = st.selectbox(f"Velg bok (ark fra excel-fil)", sheet_names, help= f"henter data fra {excel_file}")
     df = xl.parse(sheet)
     display = df[['Term']]
-    st.write(display)
+    st.write(display, use_container_with=True)
 # Read the selected sheet
 
 
