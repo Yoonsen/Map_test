@@ -39,7 +39,7 @@ xl = pd.ExcelFile(excel_file)
 sheet_names = xl.sheet_names
 
 # Create a dropdown for sheet selection
-select_field, map_field = st.columns([2,5])
+select_field, map_field = st.columns([1,6])
 with select_field:
     sheet = st.selectbox(f"Velg bok (ark fra excel-fil)", sheet_names, help= f"henter data fra {excel_file}")
     df = xl.parse(sheet)
