@@ -39,31 +39,33 @@ xl = pd.ExcelFile(excel_file)
 sheet_names = xl.sheet_names
 
 # Create a dropdown for sheet selection
-select_field, _ = st.columns([2,5])
+select_field, map_field = st.columns([2,5])
 with select_field:
     sheet = st.selectbox(f"Velg bok (ark fra excel-fil)", sheet_names, help= f"henter data fra {excel_file}")
-
+    df = xl.parse(sheet)
+    display = df[['Term']]
+    st.write(display)
 # Read the selected sheet
-df = xl.parse(sheet)
 
 
-# Check for required columns
-if 'Latitude' in df.columns and 'Longitude' in df.columns:
-    # Ensure Latitude and Longitude are numeric
-    df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
-    df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
-
-    # Drop rows with invalid coordinates
-    df = df.dropna(subset=['Latitude', 'Longitude'])
-
-    # Generate the map and cache it
-    map_object = create_map(df)
+with map_field:
+    # Check for required columns
+    if 'Latitude' in df.columns and 'Longitude' in df.columns:
+        # Ensure Latitude and Longitude are numeric
+        df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
+        df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
     
-    # Display the map
-    # Display the map with return value to enable full interactivity
-    st_data = st_folium(map_object, width=None, height=900, key="map_render", returned_objects=[])
-else:
-    st.write("The selected sheet does not contain 'Latitude' and 'Longitude' columns.")
+        # Drop rows with invalid coordinates
+        df = df.dropna(subset=['Latitude', 'Longitude'])
+    
+        # Generate the map and cache it
+        map_object = create_map(df)
+        
+        # Display the map
+        # Display the map with return value to enable full interactivity
+        st_data = st_folium(map_object, width=None, height=900, key="map_render", returned_objects=[])
+    else:
+        st.write("The selected sheet does not contain 'Latitude' and 'Longitude' columns.")
 
 # Display the DataFrame
-st.write(df)
+
