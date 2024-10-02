@@ -61,7 +61,7 @@ if 'Latitude' in df.columns and 'Longitude' in df.columns:
     
     # Display the map
     # Display the map with return value to enable full interactivity
-    st_data = st_folium(map_object, width=None, height=900, key="map_render")
+    st_data = st_folium(map_object, width=None, height=900, key="map_render", returned_objects=[])
 else:
     st.write("The selected sheet does not contain 'Latitude' and 'Longitude' columns.")
 
