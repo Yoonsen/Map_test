@@ -18,6 +18,22 @@ def dataframe_with_selections(df, key_prefix):
     selected_indices = list(np.where(edited_df['Select'])[0])
     return selected_indices, edited_df
 
+def add_jitter_to_coordinates(lat, lon, jitter_amount=0.0001):
+    """
+    Add random jitter to coordinates to prevent marker overlap.
+    
+    Args:
+        lat (float): Latitude value
+        lon (float): Longitude value
+        jitter_amount (float): Maximum amount of random offset (in degrees)
+    
+    Returns:
+        tuple: (jittered_lat, jittered_lon)
+    """
+    lat_jitter = np.random.uniform(-jitter_amount, jitter_amount)
+    lon_jitter = np.random.uniform(-jitter_amount, jitter_amount)
+    return lat + lat_jitter, lon + lon_jitter
+
 def hex_to_folium_color(hex_color):
     # Convert hex to RGB
     hex_color = hex_color.lstrip('#')
@@ -121,6 +137,15 @@ with col1:
                 df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
                 df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
                 df = df.dropna(subset=['Latitude', 'Longitude'])
+
+              # Add jitter to coordinates
+                jittered_coords = [add_jitter_to_coordinates(lat, lon, jitter_amount= 0.005) #st.session_state.get('jitter', 0.1)) 
+                                  for lat, lon in zip(df['Latitude'], df['Longitude'])]
+                df['Latitude'] = [coord[0] for coord in jittered_coords]
+                df['Longitude'] = [coord[1] for coord in jittered_coords]
+                
+
+                
                 book_data[book] = {'df': df, 'color': hex_to_folium_color(color)}
                 
                 # Calculate overall center
@@ -137,23 +162,16 @@ with col1:
     
 
     basemap = st.selectbox("Basemap", BASEMAP_OPTIONS, key='single_map')
-    st.write("Toggle layers using the layer control in the map")
-
+    #jitter_amount = 0.005 #st.slider("Markørspredning (km)", 0.0, 5.0, 1.0, key="jitter") / 111.0  # Convert km to degrees
+    #st.write(jitter_amount)
 with col_map:
     m = leafmap.Map(
         center=(center_lat, center_lon),
-        zoom=5
+        zoom=5,
+        basemap=basemap
     )
     
-    # Apply the selected basemap
-    if basemap.startswith("Stamen"):
-        m.add_tile_layer(
-            url=f"https://stamen-tiles-{{s}}.a.ssl.fastly.net/{basemap.split('.')[1].lower()}/{{z}}/{{x}}/{{y}}.png",
-            name=basemap,
-            attr='Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-        )
-    else:
-        m.add_basemap(basemap)
+    #basemap)
     
     # Add each book as a separate layer
     for book in selected_books:
